@@ -1,30 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { capitalizeFirstLetter } from "../../utils/helpers";
 
-const categories = [
-  {
-    name: "Commercial",
-    description:
-      "Photos of grocery stores, food trucks, and other commercial projects",
-  },
-  {
-    name: "Portraits",
-    description: "Portraits of people in my life",
-  },
-  {
-    name: "Food",
-    description: "Delicious delicacies",
-  },
-  {
-    name: "Landscape",
-    description: "Fields, farmhouses, waterfalls, and the beauty of nature",
-  },
-];
+function Nav(props) {
+  // Destructure props from App.js
+  const { categories = [], setCurrentCategory, currentCategory } = props;
 
-function categorySelected(name) {
-  console.log(`${name} clicked!`);
-}
+  useEffect(() => {
+    document.title = capitalizeFirstLetter(currentCategory.name);
+  }, [currentCategory]);
 
-function Nav() {
   return (
     <header className="flex-row">
       <h2>
@@ -46,10 +30,19 @@ function Nav() {
           <li>
             <span>Contact</span>
           </li>
+          {/* Go through each of the categories from App.js */}
           {categories.map((category) => (
-            <li className="mx-1" key={category.name}>
-              <span onClick={() => categorySelected(category.name)}>
-                {category.name}
+            <li
+              className={`mx-1 ${
+                // If the currentCategory's name equals this category's name...
+                // this li has a the class `navActive`
+                currentCategory.name === category.name && "navActive"
+              }`}
+              key={category.name}
+            >
+              {/* If this <li> is clicked, set the currentCategory equal to this <li> */}
+              <span onClick={() => setCurrentCategory(category)}>
+                {capitalizeFirstLetter(category.name)}
               </span>
             </li>
           ))}
